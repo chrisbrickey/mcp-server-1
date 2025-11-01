@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "time-date-server": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "./server.py"
+      ],
+      "env": {}
+    }
+  }
+}
