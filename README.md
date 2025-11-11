@@ -4,66 +4,47 @@ A simple Model Context Protocol (MCP) server that provides utilities to AI assis
 I'm using this repo to learn about MCP server implementation.
 
 ## MCP Framework
-
-- **MCP Python SDK** (`mcp` package)
+**MCP Python SDK** (`mcp` package)
 _I considered using FastMCP framework which requires less boilerplate. I decided against it for this repo in hopes of more thoroughly internalizing concepts by using a more explicit framework._
 
-## Features
 
-This MCP server provides the following tools at this time:
-- fetch current date
+## Development Approach
 
-## Installation
+This project uses **PEP 723 inline dependency declarations** instead of a traditional project structure with `pyproject.toml` and lock files. This choice makes the server completely self-contained in a single file, which is ideal for:
+- Learning and experimentation
+- Easy sharing and portability
+- Simple projects that don't need complex dependency management
 
+For larger production projects, a traditional structure with `pyproject.toml`, lock files, and package structure would be more appropriate.
+
+
+## Setup
 This project uses [uv](https://github.com/astral-sh/uv) to run a self-contained Python script with inline dependencies ([PEP 723](https://peps.python.org/pep-0723/)).
-
-```bash
+This means that there is no installation required. Dependencies are declared inline in server.py, instead of in a pyproject.toml file.
+```
 # Clone the repository
 git clone <repository-url>
 cd mcp-server-1
-
-# No installation needed! Dependencies are declared inline in server.py instead of in a pyproject.toml file.
 ```
 
-## Usage
+##  Interacting with the MCP Server
 
-### Running the Server
-
-```bash
-# Run the MCP server (uv handles dependencies automatically)
+1. Start the MCP Server
+```
 uv run ./server.py
 ```
+The server will start and communicate via stdio (standard input/output), which is the standard transport for local MCP servers. 
+The first time you run it, `uv` will automatically create a virtual environment and install the required dependencies.
 _You may need to make the server.py file executable before running the above command._
 
-The server will start and communicate via stdio (standard input/output), which is the standard transport for local MCP servers. The first time you run it, `uv` will automatically create a virtual environment and install the required dependencies.
+2. Connect to the server via Claude Code
+- Open claude code from the terminal.
+- Enter `/mcp` to view available MCP servers. Confirm that `time-date-server` is one of them.
 
-### Connecting to Claude Desktop
-
-To use this server with Claude Desktop, add it to your Claude Desktop configuration file:
-
-**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
-
-**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "time-server": {
-      "command": "uv",
-      "args": [
-        "--directory",
-        "/absolute/path/to/mcp-server-1",
-        "run",
-        "server.py"
-      ]
-    }
-  }
-}
-```
-
-Replace `/absolute/path/to/mcp-server-1` with the actual path to this project directory.
-
-After updating the configuration, restart Claude Desktop. The time and date tools will be automatically available during your conversations with Claude.
+3. Exercise the server
+- Resources can be referenced with @ mentions
+- Tools will automatically be used during the conversation
+- Prompts show up as / slash commands
 
 
 ## How It Works
@@ -75,12 +56,3 @@ After updating the configuration, restart Claude Desktop. The time and date tool
 5. During conversations, Claude can automatically call these tools when relevant
 6. The server executes the requested tool and returns results to Claude
 7. Claude incorporates the results into its response to you
-
-## Development Approach
-
-This project uses **PEP 723 inline dependency declarations** instead of a traditional project structure with `pyproject.toml` and lock files. This choice makes the server completely self-contained in a single file, which is ideal for:
-- Learning and experimentation
-- Easy sharing and portability
-- Simple projects that don't need complex dependency management
-
-For larger production projects, a traditional structure with `pyproject.toml`, lock files, and package structure would be more appropriate.
