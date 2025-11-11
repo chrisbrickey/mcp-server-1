@@ -41,6 +41,9 @@ env/
 .idea/**/dictionaries
 .idea/**/shelf
 
+# Claude
+.claude/
+
 # OS
 .DS_Store
 .DS_Store?
